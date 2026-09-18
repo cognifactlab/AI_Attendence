@@ -68,10 +68,10 @@ export default function LandingPage() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => navigate('/dashboard')}
+                onClick={() => navigate('/login')}
                 className="px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-semibold text-lg shadow-xl shadow-primary-600/30 transition-colors flex items-center justify-center gap-2"
               >
-                Launch Dashboard
+                Get Started
                 <ArrowRight className="w-5 h-5" />
               </motion.button>
               <motion.button
@@ -277,7 +277,7 @@ export default function LandingPage() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate('/login')}
               className="px-10 py-4 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl font-semibold text-lg shadow-xl shadow-primary-600/30 transition-all"
             >
               Launch Application

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard,
@@ -12,7 +12,15 @@ import {
   X,
   Shield,
   ChevronRight,
+  Moon,
+  Sun,
+  LogOut,
+  User,
+  Settings,
 } from 'lucide-react';
+import { useAuthStore } from '../store/authStore';
+import { useThemeStore } from '../store/themeStore';
+import toast from 'react-hot-toast';
 
 const navItems = [
   { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -21,6 +29,8 @@ const navItems = [
   { path: '/employees', label: 'Employees', icon: Users },
   { path: '/attendance', label: 'Attendance Records', icon: ClipboardList },
   { path: '/reports', label: 'Reports', icon: BarChart3 },
+  { path: '/profile', label: 'Profile', icon: User },
+  { path: '/settings', label: 'Settings', icon: Settings },
 ];
 
 interface LayoutProps {
@@ -30,6 +40,15 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuthStore();
+  const { isDark, toggle } = useThemeStore();
+
+  const handleLogout = () => {
+    logout();
+    toast.success('Logged out successfully');
+    navigate('/login');
+  };
 
   return (
     <div className="min-h-screen bg-surface-50 flex">
@@ -92,17 +111,26 @@ export default function Layout({ children }: LayoutProps) {
 
           {/* Bottom section */}
           <div className="p-4 border-t border-surface-700">
-            <div className="glass-dark rounded-xl p-4">
+            <div className="glass-dark rounded-xl p-4 mb-3">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-accent-500 flex items-center justify-center">
-                  <span className="text-xs font-bold text-white">A</span>
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Admin User</p>
-                  <p className="text-xs text-surface-400">admin@company.com</p>
+                <img
+                  src={user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'U')}&background=3b82f6&color=fff&size=64`}
+                  alt={user?.name}
+                  className="w-8 h-8 rounded-full"
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate">{user?.name || 'User'}</p>
+                  <p className="text-xs text-surface-400 truncate">{user?.email || 'user@company.com'}</p>
                 </div>
               </div>
             </div>
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-surface-300 hover:bg-surface-800 hover:text-red-400 transition-colors text-sm"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Logout</span>
+            </button>
           </div>
         </div>
       </aside>
@@ -133,9 +161,20 @@ export default function Layout({ children }: LayoutProps) {
                 <div className="w-2 h-2 rounded-full bg-accent-500 animate-pulse" />
                 <span className="text-xs font-medium text-accent-700">System Online</span>
               </div>
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
-                <span className="text-sm font-bold text-white">A</span>
-              </div>
+              <button
+                onClick={toggle}
+                className="p-2 rounded-lg hover:bg-surface-100 transition-colors"
+                title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+              >
+                {isDark ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5 text-surface-500" />}
+              </button>
+              <NavLink to="/profile" className="flex items-center gap-2">
+                <img
+                  src={user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'U')}&background=3b82f6&color=fff&size=64`}
+                  alt={user?.name}
+                  className="w-9 h-9 rounded-full"
+                />
+              </NavLink>
             </div>
           </div>
         </header>

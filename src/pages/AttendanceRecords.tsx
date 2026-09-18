@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Search, Filter, Download, Calendar, Clock, CheckCircle2,
-  AlertCircle, XCircle, UserCheck, Building2
+  AlertCircle, XCircle, UserCheck, Building2, FileJson
 } from 'lucide-react';
 import { attendanceRecords } from '../data/mockData';
+import { exportToCSV, exportToJSON } from '../utils/helpers';
+import toast from 'react-hot-toast';
 
 export default function AttendanceRecords() {
   const [dateFilter, setDateFilter] = useState(new Date().toISOString().split('T')[0]);
@@ -37,19 +39,14 @@ export default function AttendanceRecords() {
     halfDay: filtered.filter(r => r.status === 'half-day').length,
   };
 
-  const handleExport = () => {
-    const csv = [
-      'Employee ID,Name,Department,Date,Check In,Check Out,Status,Confidence',
-      ...filtered.map(r => `${r.employeeId},${r.employeeName},${r.department},${r.date},${r.checkIn || ''},${r.checkOut || ''},${r.status},${r.confidence}`)
-    ].join('\n');
-    
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `attendance_${dateFilter}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+  const handleExportCSV = () => {
+    exportToCSV(filtered, `attendance_${dateFilter}`);
+    toast.success('CSV exported successfully');
+  };
+
+  const handleExportJSON = () => {
+    exportToJSON(filtered, `attendance_${dateFilter}`);
+    toast.success('JSON exported successfully');
   };
 
   return (
@@ -123,12 +120,20 @@ export default function AttendanceRecords() {
             <option value="absent">Absent</option>
             <option value="half-day">Half Day</option>
           </select>
-          <button
-            onClick={handleExport}
-            className="px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-medium flex items-center gap-2 transition-colors text-sm"
-          >
-            <Download className="w-4 h-4" /> Export CSV
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={handleExportCSV}
+              className="px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-medium flex items-center gap-2 transition-colors text-sm"
+            >
+              <Download className="w-4 h-4" /> CSV
+            </button>
+            <button
+              onClick={handleExportJSON}
+              className="px-4 py-2.5 border border-surface-200 text-surface-700 rounded-xl font-medium flex items-center gap-2 hover:bg-surface-50 transition-colors text-sm"
+            >
+              <FileJson className="w-4 h-4" /> JSON
+            </button>
+          </div>
         </div>
       </div>
 

@@ -2,10 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Camera, Scan, CheckCircle2, XCircle, Clock, User,
-  Play, Pause, RotateCcw, Zap, Target, Activity
+  Play, Pause, RotateCcw, Zap, Target, Activity, Video, VideoOff
 } from 'lucide-react';
 import { employees, recentScans as initialScans } from '../data/mockData';
 import { ScanResult } from '../types';
+import { useCamera } from '../hooks/useCamera';
+import toast from 'react-hot-toast';
 
 export default function FaceRecognition() {
   const [scanning, setScanning] = useState(false);
@@ -13,7 +15,9 @@ export default function FaceRecognition() {
   const [currentMatch, setCurrentMatch] = useState<ScanResult | null>(null);
   const [scanHistory, setScanHistory] = useState<ScanResult[]>(initialScans.slice(0, 10));
   const [stats, setStats] = useState({ total: 0, successful: 0, failed: 0 });
+  const [cameraReady, setCameraReady] = useState(false);
   const scanInterval = useRef<number | null>(null);
+  const { videoRef, isActive: cameraActive, error: cameraError, startCamera, stopCamera } = useCamera();
 
   useEffect(() => {
     if (scanning) {
@@ -53,11 +57,23 @@ export default function FaceRecognition() {
     };
   }, [scanning]);
 
-  const toggleScanning = () => {
-    setScanning(!scanning);
+  const toggleScanning = async () => {
     if (scanning) {
+      setScanning(false);
       setFaceDetected(false);
       setCurrentMatch(null);
+      stopCamera();
+      setCameraReady(false);
+    } else {
+      try {
+        await startCamera();
+        setCameraReady(true);
+        setScanning(true);
+        toast.success('Camera activated');
+      } catch (err) {
+        toast.error('Failed to access camera. Using simulation mode.');
+        setScanning(true);
+      }
     }
   };
 
@@ -95,19 +111,29 @@ export default function FaceRecognition() {
             {!scanning ? (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
-                  <Camera className="w-20 h-20 text-surface-600 mx-auto mb-4" />
+                  <VideoOff className="w-20 h-20 text-surface-600 mx-auto mb-4" />
                   <p className="text-surface-400 text-lg">Camera Offline</p>
                   <p className="text-surface-500 text-sm mt-1">Click "Start" to begin scanning</p>
                 </div>
               </div>
             ) : (
               <>
-                {/* Simulated camera feed */}
-                <div className="absolute inset-0 bg-gradient-to-br from-surface-800 to-surface-900">
-                  <div className="absolute inset-0 opacity-20" style={{
-                    backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(59,130,246,0.3) 0%, transparent 50%)'
-                  }} />
-                </div>
+                {/* Real camera feed or simulated */}
+                {cameraActive && cameraReady ? (
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    playsInline
+                    muted
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-surface-800 to-surface-900">
+                    <div className="absolute inset-0 opacity-20" style={{
+                      backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(59,130,246,0.3) 0%, transparent 50%)'
+                    }} />
+                  </div>
+                )}
 
                 {/* Face detection box */}
                 <div className="absolute inset-0 flex items-center justify-center">
