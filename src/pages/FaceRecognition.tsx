@@ -6,7 +6,6 @@ import {
 } from 'lucide-react';
 import { employees, recentScans as initialScans } from '../data/mockData';
 import { ScanResult } from '../types';
-import { useCamera } from '../hooks/useCamera';
 import toast from 'react-hot-toast';
 
 export default function FaceRecognition() {
@@ -16,8 +15,48 @@ export default function FaceRecognition() {
   const [scanHistory, setScanHistory] = useState<ScanResult[]>(initialScans.slice(0, 10));
   const [stats, setStats] = useState({ total: 0, successful: 0, failed: 0 });
   const [cameraReady, setCameraReady] = useState(false);
+  const [cameraActive, setCameraActive] = useState(false);
   const scanInterval = useRef<number | null>(null);
-  const { videoRef, isActive: cameraActive, error: cameraError, startCamera, stopCamera } = useCamera();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+
+  const startCamera = async () => {
+    try {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        throw new Error('Camera not supported');
+      }
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
+      });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        streamRef.current = stream;
+        setCameraActive(true);
+      }
+    } catch (err) {
+      console.error('Camera error:', err);
+      setCameraActive(false);
+    }
+  };
+
+  const stopCamera = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+    }
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+    setCameraActive(false);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (scanning) {
