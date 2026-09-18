@@ -40,7 +40,7 @@ export default function Dashboard() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
-              className="bg-white rounded-2xl p-5 shadow-sm border border-surface-100 hover:shadow-md transition-shadow"
+              className="bg-white dark:bg-surface-800 rounded-2xl p-5 shadow-sm border border-surface-100 dark:border-surface-700 hover:shadow-md transition-shadow"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className={`w-10 h-10 rounded-xl ${card.color} flex items-center justify-center`}>
@@ -65,7 +65,7 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-surface-100"
+          className="lg:col-span-2 bg-white dark:bg-surface-800 rounded-2xl p-6 shadow-sm border border-surface-100 dark:border-surface-700"
         >
           <h3 className="text-lg font-semibold text-surface-900 mb-4">Weekly Attendance</h3>
           <ResponsiveContainer width="100%" height={280}>
@@ -88,9 +88,9 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-white rounded-2xl p-6 shadow-sm border border-surface-100"
+          className="bg-white dark:bg-surface-800 rounded-2xl p-6 shadow-sm border border-surface-100 dark:border-surface-700"
         >
-          <h3 className="text-lg font-semibold text-surface-900 mb-4">Today's Overview</h3>
+          <h3 className="text-lg font-semibold text-surface-900 dark:text-surface-100 mb-4">Today's Overview</h3>
           <ResponsiveContainer width="100%" height={200}>
             <PieChart>
               <Pie data={pieData} cx="50%" cy="50%" innerRadius={50} outerRadius={80} dataKey="value" stroke="none">
@@ -119,9 +119,9 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-white rounded-2xl p-6 shadow-sm border border-surface-100"
+          className="bg-white dark:bg-surface-800 rounded-2xl p-6 shadow-sm border border-surface-100 dark:border-surface-700"
         >
-          <h3 className="text-lg font-semibold text-surface-900 mb-4">Monthly Trend</h3>
+          <h3 className="text-lg font-semibold text-surface-900 dark:text-surface-100 mb-4">Monthly Trend</h3>
           <ResponsiveContainer width="100%" height={240}>
             <AreaChart data={monthlyTrend}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
@@ -139,10 +139,10 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="bg-white rounded-2xl p-6 shadow-sm border border-surface-100"
+          className="bg-white dark:bg-surface-800 rounded-2xl p-6 shadow-sm border border-surface-100 dark:border-surface-700"
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-surface-900">Recent Scans</h3>
+            <h3 className="text-lg font-semibold text-surface-900 dark:text-surface-100">Recent Scans</h3>
             <div className="flex items-center gap-1 text-xs text-accent-600 bg-accent-50 px-2 py-1 rounded-full">
               <div className="w-1.5 h-1.5 rounded-full bg-accent-500 animate-pulse" />
               Live
@@ -150,7 +150,7 @@ export default function Dashboard() {
           </div>
           <div className="space-y-3 max-h-[280px] overflow-y-auto">
             {recentScans.slice(0, 8).map((scan) => (
-              <div key={scan.id} className="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-50 transition-colors">
+              <div key={scan.id} className="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-50 dark:hover:bg-surface-700 transition-colors">
                 <div className={`w-9 h-9 rounded-full flex items-center justify-center ${
                   scan.status === 'success' ? 'bg-accent-100' : 'bg-red-100'
                 }`}>
@@ -178,9 +178,9 @@ export default function Dashboard() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
-        className="bg-white rounded-2xl p-6 shadow-sm border border-surface-100"
+        className="bg-white dark:bg-surface-800 rounded-2xl p-6 shadow-sm border border-surface-100 dark:border-surface-700"
       >
-        <h3 className="text-lg font-semibold text-surface-900 mb-4">Department Performance</h3>
+        <h3 className="text-lg font-semibold text-surface-900 dark:text-surface-100 mb-4">Department Performance</h3>
         <ResponsiveContainer width="100%" height={280}>
           <LineChart data={departmentStats}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />

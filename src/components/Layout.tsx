@@ -51,7 +51,7 @@ export default function Layout({ children }: LayoutProps) {
   };
 
   return (
-    <div className="min-h-screen bg-surface-50 flex">
+    <div className="min-h-screen bg-surface-50 dark:bg-surface-900">
       {/* Mobile overlay */}
       <AnimatePresence>
         {sidebarOpen && (
@@ -67,8 +67,8 @@ export default function Layout({ children }: LayoutProps) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed lg:static inset-y-0 left-0 z-50 w-72 bg-surface-900 text-white transform transition-transform duration-300 ease-in-out ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        className={`fixed inset-y-0 left-0 z-50 w-72 bg-surface-900 text-white transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="flex flex-col h-full">
@@ -136,34 +136,34 @@ export default function Layout({ children }: LayoutProps) {
       </aside>
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col min-h-screen">
+      <div className="lg:ml-72 flex-1 flex flex-col min-h-screen">
         {/* Top bar */}
-        <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-surface-200 px-4 lg:px-8 py-4">
+        <header className="sticky top-0 z-30 bg-white/90 dark:bg-surface-800/90 backdrop-blur-md border-b border-surface-200 dark:border-surface-700 px-4 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="lg:hidden p-2 rounded-lg hover:bg-surface-100 transition-colors"
+                className="lg:hidden p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 transition-colors"
               >
-                {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                {sidebarOpen ? <X className="w-5 h-5 text-surface-700 dark:text-surface-300" /> : <Menu className="w-5 h-5 text-surface-700 dark:text-surface-300" />}
               </button>
               <div>
-                <h2 className="text-lg font-semibold text-surface-900">
+                <h2 className="text-lg font-semibold text-surface-900 dark:text-surface-100">
                   {navItems.find(n => n.path === location.pathname)?.label || 'Welcome'}
                 </h2>
-                <p className="text-sm text-surface-500">
+                <p className="text-sm text-surface-500 dark:text-surface-400">
                   {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-accent-50 rounded-full">
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-accent-50 dark:bg-accent-900/20 rounded-full">
                 <div className="w-2 h-2 rounded-full bg-accent-500 animate-pulse" />
-                <span className="text-xs font-medium text-accent-700">System Online</span>
+                <span className="text-xs font-medium text-accent-700 dark:text-accent-400">System Online</span>
               </div>
               <button
                 onClick={toggle}
-                className="p-2 rounded-lg hover:bg-surface-100 transition-colors"
+                className="p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 transition-colors"
                 title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
               >
                 {isDark ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5 text-surface-500" />}

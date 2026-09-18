@@ -9,7 +9,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <style>
-      /* 内联样式确保主题色立即生效，避免闪烁 */
+      /* Prevent theme flash */
       html,
       body {
         margin: 0;
@@ -19,17 +19,21 @@
       }
       html.light,
       html.light body {
-        background-color: #ffffff !important;
-        color: #000000;
+        background-color: #f8fafc !important;
+        color: #0f172a;
       }
       html.dark,
       html.dark body {
-        background-color: #1a1a1a !important;
-        color: #ffffff;
+        background-color: #0f172a !important;
+        color: #f1f5f9;
+      }
+      /* Prevent FOUC */
+      #root {
+        min-height: 100vh;
       }
     </style>
     <script>
-      // 在 React 加载前立即设置主题，避免闪烁
+      // Initialize theme before React loads to prevent flash
       (function () {
         const isInIframe = window.self !== window.top;
 
@@ -39,8 +43,22 @@
           document.documentElement.setAttribute("data-theme", theme);
         }
 
+        // Try to read theme from localStorage (Zustand persist storage)
+        try {
+          const stored = localStorage.getItem('theme-storage');
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            if (parsed && parsed.state && typeof parsed.state.isDark === 'boolean') {
+              applyThemeToDOM(parsed.state.isDark ? 'dark' : 'light');
+              return;
+            }
+          }
+        } catch (e) {
+          // Ignore errors, use default
+        }
+
         if (isInIframe) {
-          // 监听父窗口主动推送的主题消息
+          // Listen for theme messages from parent window
           window.addEventListener("message", function (event) {
             if (event.data && typeof event.data.theme === "string") {
               const theme = event.data.theme;
@@ -49,10 +67,10 @@
               }
             }
           });
-        } else {
-          // 非 iframe 环境，使用默认 light 主题
-          applyThemeToDOM("light");
         }
+        
+        // Default to light theme
+        applyThemeToDOM("light");
       })();
     </script>
       <script>
