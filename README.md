@@ -4,7 +4,8 @@ A production-ready AI-powered attendance management system using real face recog
 
 ![FaceTrack AI](https://img.shields.io/badge/FaceTrack-AI-blue)
 ![React](https://img.shields.io/badge/React-18-blue)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.104-green)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.0-blue)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+pgvector-blue)
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue)
 
@@ -20,48 +21,38 @@ A production-ready AI-powered attendance management system using real face recog
 - 🌙 **Dark Mode** - Full dark mode support across all pages
 - 📤 **Data Export** - CSV and JSON export for attendance records
 
-### Technical Features
-- Code splitting with lazy loading
-- Form validation with Zod schemas
-- Toast notifications for user feedback
-- Error boundaries for graceful error handling
-- Loading skeletons for better UX
-- Real camera integration via WebRTC
-- Zustand for state management
-- Recharts for data visualization
-- Framer Motion for animations
-
-## 📸 Screenshots
-
-### Landing Page
-Modern landing page with animated hero section, feature showcase, and statistics display.
-
-### Dashboard
-Real-time attendance stats with interactive charts (bar, pie, area, line), recent activity feed, and system status indicators.
-
-### Face Registration
-4-step wizard: Select Employee → Capture Face → Process Embeddings → Complete
-
-### Face Recognition
-Live camera feed with real-time face detection, match confidence display, and scan history.
-
-### Employee Management
-Full CRUD operations with search, filter, and department management.
-
-### Attendance Records
-Daily attendance view with filters, confidence scores, and CSV/JSON export.
-
-### Reports
-Comprehensive analytics with department comparison, monthly trends, top performers, and key insights.
+### Premium UI/UX
+- ✨ **Glass Morphism Effects** - Modern backdrop blur with transparency
+- 🎨 **Gradient Design System** - Professional color palette with multi-color gradients
+- 💫 **Smooth Animations** - Framer Motion powered transitions
+- 🎭 **Micro-interactions** - Hover effects, lift animations, shadow changes
+- 📐 **8px Grid System** - Consistent spacing and layout
+- 🎯 **Accessibility** - WCAG AA compliant design
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Docker & Docker Compose
-- Node.js 18+ (for local development)
-- Python 3.10+ (for backend)
+- Node.js 18+ and npm
+- Docker & Docker Compose (for full stack deployment)
+- PostgreSQL 15+ with pgvector extension (for backend)
 
-### Option 1: Docker (Recommended)
+### Option 1: Frontend Only (Development)
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/facetrack-ai.git
+cd facetrack-ai
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Open http://localhost:5173
+```
+
+### Option 2: Full Stack with Docker
 
 ```bash
 # Clone the repository
@@ -78,25 +69,6 @@ docker-compose up -d
 # Frontend: http://localhost:8080
 # Backend API: http://localhost:8000
 # API Docs: http://localhost:8000/docs
-```
-
-### Option 2: Local Development
-
-#### Frontend
-```bash
-cd frontend
-npm install
-npm run dev
-# Runs on http://localhost:5173
-```
-
-#### Backend
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
 ```
 
 ### Default Credentials
@@ -130,69 +102,74 @@ uvicorn app.main:app --reload --port 8000
 
 ```
 facetrack-ai/
-├── frontend/
-│   ├── src/
-│   │   ├── components/       # Reusable UI components
-│   │   │   ├── Layout.tsx    # App layout with sidebar
-│   │   │   ├── Skeleton.tsx  # Loading skeletons
-│   │   │   └── ErrorBoundary.tsx
-│   │   ├── pages/            # Page components
-│   │   │   ├── LandingPage.tsx
-│   │   │   ├── LoginPage.tsx
-│   │   │   ├── Dashboard.tsx
-│   │   │   ├── FaceRegistration.tsx
-│   │   │   ├── FaceRecognition.tsx
-│   │   │   ├── Employees.tsx
-│   │   │   ├── AttendanceRecords.tsx
-│   │   │   ├── Reports.tsx
-│   │   │   ├── ProfilePage.tsx
-│   │   │   ├── SettingsPage.tsx
-│   │   │   └── NotFoundPage.tsx
-│   │   ├── store/            # Zustand stores
-│   │   │   ├── authStore.ts
-│   │   │   └── themeStore.ts
-│   │   ├── services/         # API service layer
-│   │   │   └── api.ts
-│   │   ├── hooks/            # Custom hooks
-│   │   │   └── useCamera.ts
-│   │   ├── data/             # Mock data
-│   │   │   └── mockData.ts
-│   │   ├── utils/            # Utility functions
-│   │   │   └── helpers.ts
-│   │   ├── types.ts          # TypeScript types
-│   │   ├── App.tsx           # Main app component
-│   │   └── index.css         # Global styles
-│   ├── package.json
-│   └── vite.config.ts
+├── src/
+│   ├── components/       # Reusable UI components
+│   │   ├── Layout.tsx    # Premium sidebar layout
+│   │   ├── Skeleton.tsx  # Loading skeletons
+│   │   └── ErrorBoundary.tsx
+│   ├── pages/            # Page components
+│   │   ├── LandingPage.tsx
+│   │   ├── LoginPage.tsx
+│   │   ├── Dashboard.tsx
+│   │   ├── FaceRegistration.tsx
+│   │   ├── FaceRecognition.tsx
+│   │   ├── Employees.tsx
+│   │   ├── AttendanceRecords.tsx
+│   │   ├── Reports.tsx
+│   │   ├── ProfilePage.tsx
+│   │   ├── SettingsPage.tsx
+│   │   └── NotFoundPage.tsx
+│   ├── store/            # Zustand state management
+│   │   ├── authStore.ts
+│   │   └── themeStore.ts
+│   ├── services/         # API service layer
+│   │   └── api.ts
+│   ├── hooks/            # Custom React hooks
+│   │   └── useCamera.ts
+│   ├── data/             # Mock data
+│   │   └── mockData.ts
+│   ├── utils/            # Utility functions
+│   │   └── helpers.ts
+│   ├── types.ts          # TypeScript types
+│   ├── App.tsx           # Main app component
+│   ├── main.tsx          # Entry point
+│   └── index.css         # Premium design system
 │
 ├── backend/
-│   ├── app/
-│   │   ├── main.py           # FastAPI entry point
-│   │   ├── config.py         # Configuration
-│   │   ├── database.py       # DB connection
-│   │   ├── models/           # SQLAlchemy models
-│   │   ├── schemas/          # Pydantic schemas
-│   │   ├── routers/          # API endpoints
-│   │   ├── services/         # Business logic
-│   │   │   ├── face_service.py
-│   │   │   ├── auth_service.py
-│   │   │   └── attendance_service.py
-│   │   └── middleware/       # Auth, rate limiting
-│   ├── tests/                # Test suite
-│   ├── init.sql              # Database initialization
-│   ├── requirements.txt
-│   └── Dockerfile
+│   ├── init.sql          # Database initialization
+│   └── requirements.txt  # Python dependencies
 │
 ├── nginx/
-│   └── nginx.conf            # Reverse proxy config
+│   └── nginx.conf        # Reverse proxy config
 │
 ├── docs/
 │   └── BACKEND_ARCHITECTURE.md
 │
-├── docker-compose.yml
-├── .env.example
-└── README.md
+├── docker-compose.yml    # Docker orchestration
+├── .env.example          # Environment template
+├── .gitignore           # Git ignore rules
+├── package.json         # Node dependencies
+├── tsconfig.json        # TypeScript config
+├── vite.config.js       # Vite configuration
+└── README.md            # This file
 ```
+
+## 🎨 Design System
+
+### Color Palette
+- **Primary**: Indigo (#6366f1) - Professional, trustworthy
+- **Accent**: Emerald (#10b981) - Success, growth
+- **Surface**: Zinc (#fafafa to #09090b) - Clean, neutral
+
+### Typography
+- **Font**: Inter - Modern, highly readable
+- **Letter Spacing**: -0.011em for better readability
+
+### Components
+- **Cards**: Elevated with hover effects and shadows
+- **Buttons**: Gradient backgrounds with smooth transitions
+- **Inputs**: Modern borders with focus states
+- **Badges**: Color-coded status indicators
 
 ## 🔌 API Endpoints
 
@@ -228,25 +205,6 @@ facetrack-ai/
 | POST | /api/attendance/check-out | Mark check-out |
 | GET | /api/attendance/export | Export data |
 
-### Reports
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /api/reports/dashboard | Dashboard statistics |
-| GET | /api/reports/department | Department stats |
-| GET | /api/reports/monthly | Monthly trends |
-
-## 🧪 Testing
-
-```bash
-# Backend tests
-cd backend
-pytest tests/ -v
-
-# Frontend tests
-cd frontend
-npm run test
-```
-
 ## 📊 Performance Metrics
 
 | Operation | Time | Notes |
@@ -269,16 +227,78 @@ npm run test
 - XSS protection headers
 - HTTPS-ready configuration
 
-## 🌐 Browser Support
+## 🛠️ Tech Stack
 
-- Chrome 90+
-- Firefox 88+
-- Safari 14+
-- Edge 90+
+### Frontend
+- **React 18** - UI library
+- **TypeScript** - Type safety
+- **Vite** - Build tool
+- **Tailwind CSS** - Styling
+- **Framer Motion** - Animations
+- **Recharts** - Data visualization
+- **Zustand** - State management
+- **React Router** - Routing
+- **React Hot Toast** - Notifications
+
+### Backend
+- **FastAPI** - Python web framework
+- **PostgreSQL 15** - Database
+- **pgvector** - Vector similarity search
+- **face_recognition** - Face detection library
+- **SQLAlchemy** - ORM
+- **Pydantic** - Data validation
+- **JWT** - Authentication
+
+### Infrastructure
+- **Docker** - Containerization
+- **Nginx** - Reverse proxy
+- **Redis** - Caching
+- **GitHub Actions** - CI/CD
+
+## 📦 Build & Deployment
+
+### Frontend Build
+```bash
+npm run build
+# Output: dist/ (optimized for production)
+```
+
+### Docker Build
+```bash
+docker-compose build
+docker-compose up -d
+```
+
+### Production Deployment
+```bash
+# Build frontend
+npm run build
+
+# Start with Docker
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+## 🧪 Testing
+
+```bash
+# Frontend tests
+npm run test
+
+# Backend tests
+cd backend
+pytest tests/ -v
+```
 
 ## 📝 Environment Variables
 
 See `.env.example` for all available configuration options.
+
+Key variables:
+```env
+DATABASE_URL=postgresql://user:pass@localhost:5432/facetrack
+SECRET_KEY=your-secret-key
+VITE_API_URL=http://localhost:8000/api
+```
 
 ## 🤝 Contributing
 
@@ -299,11 +319,27 @@ This project is licensed under the MIT License.
 - [FastAPI](https://fastapi.tiangolo.com/) - Modern Python web framework
 - [React](https://reactjs.org/) - UI library
 - [Tailwind CSS](https://tailwindcss.com/) - CSS framework
+- [Framer Motion](https://www.framer.com/motion/) - Animation library
 
 ## 📞 Support
 
-For support, email support@facetrack.ai or join our Slack channel.
+For support, email support@facetrack.ai or open an issue on GitHub.
+
+## 🗺️ Roadmap
+
+- [ ] Mobile app (React Native)
+- [ ] Email/SMS notifications
+- [ ] QR code attendance
+- [ ] Geofencing
+- [ ] Shift management
+- [ ] Leave management
+- [ ] Overtime tracking
+- [ ] Payroll integration
+- [ ] Multi-tenant support
+- [ ] White-labeling
 
 ---
 
 Built with ❤️ by the FaceTrack AI Team
+
+**Star ⭐ this repo if you find it useful!**
