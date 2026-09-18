@@ -1,15 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 
-interface UseCameraReturn {
-  videoRef: React.RefObject<HTMLVideoElement>;
-  isActive: boolean;
-  error: string | null;
-  startCamera: () => Promise<void>;
-  stopCamera: () => void;
-  captureFrame: () => string | null;
-}
-
-export function useCamera(): UseCameraReturn {
+export function useCamera() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const [isActive, setIsActive] = useState(false);
@@ -18,6 +9,11 @@ export function useCamera(): UseCameraReturn {
   const startCamera = useCallback(async () => {
     try {
       setError(null);
+      
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error('Camera API not supported in this browser');
+      }
+      
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           width: { ideal: 640 },
@@ -35,6 +31,7 @@ export function useCamera(): UseCameraReturn {
       const message = err instanceof Error ? err.message : 'Failed to access camera';
       setError(message);
       console.error('Camera error:', err);
+      throw err;
     }
   }, []);
 
@@ -52,21 +49,28 @@ export function useCamera(): UseCameraReturn {
   const captureFrame = useCallback((): string | null => {
     if (!videoRef.current || !isActive) return null;
     
-    const canvas = document.createElement('canvas');
-    canvas.width = videoRef.current.videoWidth;
-    canvas.height = videoRef.current.videoHeight;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return null;
-    
-    ctx.drawImage(videoRef.current, 0, 0);
-    return canvas.toDataURL('image/jpeg', 0.8);
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = videoRef.current.videoWidth || 640;
+      canvas.height = videoRef.current.videoHeight || 480;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return null;
+      
+      ctx.drawImage(videoRef.current, 0, 0);
+      return canvas.toDataURL('image/jpeg', 0.8);
+    } catch (err) {
+      console.error('Frame capture error:', err);
+      return null;
+    }
   }, [isActive]);
 
   useEffect(() => {
     return () => {
-      stopCamera();
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+      }
     };
-  }, [stopCamera]);
+  }, []);
 
   return {
     videoRef,

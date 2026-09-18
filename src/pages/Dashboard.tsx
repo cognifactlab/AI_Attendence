@@ -1,195 +1,294 @@
 import { motion } from 'framer-motion';
-import {
-  Users, UserCheck, Clock, UserX, TrendingUp, Activity,
-  ArrowUpRight, ArrowDownRight, Scan
+import { 
+  Users, 
+  UserCheck, 
+  Clock, 
+  TrendingUp, 
+  ArrowUpRight,
+  ArrowDownRight,
+  Activity
 } from 'lucide-react';
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, LineChart, Line, AreaChart, Area
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  AreaChart,
+  Area
 } from 'recharts';
-import { dashboardStats, weeklyData, recentScans, departmentStats, monthlyTrend } from '../data/mockData';
+import { dashboardStats, weeklyData, recentScans, monthlyTrend } from '../data/mockData';
 
-const COLORS = ['#3b82f6', '#22c55e', '#f59e0b', '#ef4444'];
-
-const statCards = [
-  { label: 'Total Employees', value: dashboardStats.totalEmployees, icon: Users, color: 'bg-blue-500', change: '+3', up: true },
-  { label: 'Present Today', value: dashboardStats.presentToday, icon: UserCheck, color: 'bg-green-500', change: '+12', up: true },
-  { label: 'Late Arrivals', value: dashboardStats.lateToday, icon: Clock, color: 'bg-amber-500', change: '-2', up: false },
-  { label: 'Absent Today', value: dashboardStats.absentToday, icon: UserX, color: 'bg-red-500', change: '-1', up: false },
-  { label: 'Attendance Rate', value: `${dashboardStats.attendanceRate}%`, icon: TrendingUp, color: 'bg-purple-500', change: '+1.2%', up: true },
-  { label: 'Avg Confidence', value: `${dashboardStats.avgConfidence}%`, icon: Activity, color: 'bg-cyan-500', change: '+0.5%', up: true },
-];
-
-const pieData = [
-  { name: 'Present', value: dashboardStats.presentToday },
-  { name: 'Late', value: dashboardStats.lateToday },
-  { name: 'Absent', value: dashboardStats.absentToday },
-  { name: 'Remaining', value: dashboardStats.totalEmployees - dashboardStats.presentToday - dashboardStats.lateToday - dashboardStats.absentToday },
+const stats = [
+  { 
+    label: 'Total Employees', 
+    value: dashboardStats.totalEmployees, 
+    icon: Users, 
+    change: '+12%', 
+    trend: 'up',
+    gradient: 'from-blue-500 to-cyan-500'
+  },
+  { 
+    label: 'Present Today', 
+    value: dashboardStats.presentToday, 
+    icon: UserCheck, 
+    change: '+8%', 
+    trend: 'up',
+    gradient: 'from-emerald-500 to-teal-500'
+  },
+  { 
+    label: 'Late Arrivals', 
+    value: dashboardStats.lateToday, 
+    icon: Clock, 
+    change: '-3%', 
+    trend: 'down',
+    gradient: 'from-amber-500 to-orange-500'
+  },
+  { 
+    label: 'Attendance Rate', 
+    value: `${dashboardStats.attendanceRate}%`, 
+    icon: TrendingUp, 
+    change: '+5%', 
+    trend: 'up',
+    gradient: 'from-purple-500 to-pink-500'
+  },
 ];
 
 export default function Dashboard() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold text-surface-900 dark:text-white mb-2">
+          Dashboard
+        </h1>
+        <p className="text-surface-600 dark:text-surface-400">
+          Welcome back! Here's what's happening today.
+        </p>
+      </div>
+
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        {statCards.map((card, i) => {
-          const Icon = card.icon;
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((stat, index) => {
+          const Icon = stat.icon;
           return (
             <motion.div
-              key={i}
+              key={stat.label}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.05 }}
-              className="bg-white rounded-2xl p-5 shadow-sm border border-surface-100 hover:shadow-md transition-shadow"
+              transition={{ delay: index * 0.1 }}
+              className="card p-6"
             >
-              <div className="flex items-center justify-between mb-3">
-                <div className={`w-10 h-10 rounded-xl ${card.color} flex items-center justify-center`}>
-                  <Icon className="w-5 h-5 text-white" />
+              <div className="flex items-start justify-between mb-4">
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center shadow-lg`}>
+                  <Icon className="w-6 h-6 text-white" />
                 </div>
-                <div className={`flex items-center gap-1 text-xs font-medium ${card.up ? 'text-green-600' : 'text-red-500'}`}>
-                  {card.up ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
-                  {card.change}
+                <div className={`flex items-center gap-1 text-sm font-medium ${
+                  stat.trend === 'up' ? 'text-emerald-600' : 'text-red-600'
+                }`}>
+                  {stat.trend === 'up' ? (
+                    <ArrowUpRight className="w-4 h-4" />
+                  ) : (
+                    <ArrowDownRight className="w-4 h-4" />
+                  )}
+                  {stat.change}
                 </div>
               </div>
-              <div className="text-2xl font-bold text-surface-900">{card.value}</div>
-              <div className="text-xs text-surface-500 mt-1">{card.label}</div>
+              <div className="space-y-1">
+                <p className="text-3xl font-bold text-surface-900 dark:text-white">
+                  {stat.value}
+                </p>
+                <p className="text-sm text-surface-600 dark:text-surface-400">
+                  {stat.label}
+                </p>
+              </div>
             </motion.div>
           );
         })}
       </div>
 
       {/* Charts Row */}
-      <div className="grid lg:grid-cols-3 gap-6">
-        {/* Weekly Attendance Bar Chart */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-surface-100"
-        >
-          <h3 className="text-lg font-semibold text-surface-900 mb-4">Weekly Attendance</h3>
-          <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={weeklyData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="day" stroke="#94a3b8" fontSize={12} />
-              <YAxis stroke="#94a3b8" fontSize={12} />
-              <Tooltip
-                contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
-              />
-              <Bar dataKey="present" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="late" fill="#f59e0b" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="absent" fill="#ef4444" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </motion.div>
-
-        {/* Pie Chart */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-white rounded-2xl p-6 shadow-sm border border-surface-100"
-        >
-          <h3 className="text-lg font-semibold text-surface-900 mb-4">Today's Overview</h3>
-          <ResponsiveContainer width="100%" height={200}>
-            <PieChart>
-              <Pie data={pieData} cx="50%" cy="50%" innerRadius={50} outerRadius={80} dataKey="value" stroke="none">
-                {pieData.map((_, i) => (
-                  <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="grid grid-cols-2 gap-2 mt-4">
-            {pieData.slice(0, 3).map((item, i) => (
-              <div key={i} className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[i] }} />
-                <span className="text-xs text-surface-600">{item.name}: {item.value}</span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Bottom Row */}
-      <div className="grid lg:grid-cols-2 gap-6">
-        {/* Attendance Trend */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Weekly Attendance Chart */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-white rounded-2xl p-6 shadow-sm border border-surface-100"
+          className="card p-6"
         >
-          <h3 className="text-lg font-semibold text-surface-900 mb-4">Monthly Trend</h3>
-          <ResponsiveContainer width="100%" height={240}>
-            <AreaChart data={monthlyTrend}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="month" stroke="#94a3b8" fontSize={12} />
-              <YAxis stroke="#94a3b8" fontSize={12} />
-              <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }} />
-              <Area type="monotone" dataKey="rate" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.1} strokeWidth={2} />
-              <Area type="monotone" dataKey="confidence" stroke="#22c55e" fill="#22c55e" fillOpacity={0.1} strokeWidth={2} />
-            </AreaChart>
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h3 className="text-lg font-semibold text-surface-900 dark:text-white mb-1">
+                Weekly Attendance
+              </h3>
+              <p className="text-sm text-surface-600 dark:text-surface-400">
+                Employee attendance over the week
+              </p>
+            </div>
+          </div>
+          <ResponsiveContainer width="100%" height={280}>
+            <BarChart data={weeklyData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
+              <XAxis 
+                dataKey="day" 
+                stroke="#71717a" 
+                fontSize={12}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis 
+                stroke="#71717a" 
+                fontSize={12}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'white',
+                  border: '1px solid #e4e4e7',
+                  borderRadius: '12px',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                }}
+              />
+              <Bar 
+                dataKey="present" 
+                fill="url(#colorPresent)" 
+                radius={[8, 8, 0, 0]}
+              />
+              <defs>
+                <linearGradient id="colorPresent" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#6366f1" />
+                  <stop offset="100%" stopColor="#4f46e5" />
+                </linearGradient>
+              </defs>
+            </BarChart>
           </ResponsiveContainer>
         </motion.div>
 
-        {/* Recent Scans */}
+        {/* Monthly Trend Chart */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="bg-white rounded-2xl p-6 shadow-sm border border-surface-100"
+          className="card p-6"
         >
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-surface-900">Recent Scans</h3>
-            <div className="flex items-center gap-1 text-xs text-accent-600 bg-accent-50 px-2 py-1 rounded-full">
-              <div className="w-1.5 h-1.5 rounded-full bg-accent-500 animate-pulse" />
-              Live
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h3 className="text-lg font-semibold text-surface-900 dark:text-white mb-1">
+                Monthly Trend
+              </h3>
+              <p className="text-sm text-surface-600 dark:text-surface-400">
+                Attendance rate over the year
+              </p>
             </div>
           </div>
-          <div className="space-y-3 max-h-[280px] overflow-y-auto">
-            {recentScans.slice(0, 8).map((scan) => (
-              <div key={scan.id} className="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-50 transition-colors">
-                <div className={`w-9 h-9 rounded-full flex items-center justify-center ${
-                  scan.status === 'success' ? 'bg-accent-100' : 'bg-red-100'
-                }`}>
-                  <Scan className={`w-4 h-4 ${scan.status === 'success' ? 'text-accent-600' : 'text-red-500'}`} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-surface-900 truncate">{scan.employeeName}</p>
-                  <p className="text-xs text-surface-500">
-                    {new Date(scan.timestamp).toLocaleTimeString()} • {scan.confidence}% confidence
-                  </p>
-                </div>
-                <div className={`text-xs font-medium px-2 py-1 rounded-full ${
-                  scan.status === 'success' ? 'bg-accent-50 text-accent-700' : 'bg-red-50 text-red-700'
-                }`}>
-                  {scan.status === 'success' ? 'Marked' : 'Failed'}
-                </div>
-              </div>
-            ))}
-          </div>
+          <ResponsiveContainer width="100%" height={280}>
+            <AreaChart data={monthlyTrend}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
+              <XAxis 
+                dataKey="month" 
+                stroke="#71717a" 
+                fontSize={12}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis 
+                stroke="#71717a" 
+                fontSize={12}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'white',
+                  border: '1px solid #e4e4e7',
+                  borderRadius: '12px',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                }}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="rate" 
+                stroke="#6366f1" 
+                strokeWidth={2}
+                fill="url(#colorRate)"
+              />
+              <defs>
+                <linearGradient id="colorRate" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#6366f1" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="#6366f1" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+            </AreaChart>
+          </ResponsiveContainer>
         </motion.div>
       </div>
 
-      {/* Department Performance */}
+      {/* Recent Activity */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
-        className="bg-white rounded-2xl p-6 shadow-sm border border-surface-100"
+        className="card p-6"
       >
-        <h3 className="text-lg font-semibold text-surface-900 mb-4">Department Performance</h3>
-        <ResponsiveContainer width="100%" height={280}>
-          <LineChart data={departmentStats}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-            <XAxis dataKey="department" stroke="#94a3b8" fontSize={11} />
-            <YAxis stroke="#94a3b8" fontSize={12} />
-            <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }} />
-            <Line type="monotone" dataKey="attendance" stroke="#3b82f6" strokeWidth={2} dot={{ fill: '#3b82f6', r: 4 }} />
-          </LineChart>
-        </ResponsiveContainer>
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h3 className="text-lg font-semibold text-surface-900 dark:text-white mb-1">
+              Recent Activity
+            </h3>
+            <p className="text-sm text-surface-600 dark:text-surface-400">
+              Latest face recognition scans
+            </p>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-900/20">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs font-medium text-emerald-700 dark:text-emerald-400">
+              Live
+            </span>
+          </div>
+        </div>
+        <div className="space-y-3">
+          {recentScans.slice(0, 5).map((scan, index) => (
+            <motion.div
+              key={scan.id}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.05 }}
+              className="flex items-center gap-4 p-4 rounded-xl bg-surface-50 dark:bg-surface-800/50 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors"
+            >
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                scan.status === 'success' 
+                  ? 'bg-emerald-100 dark:bg-emerald-900/30' 
+                  : 'bg-red-100 dark:bg-red-900/30'
+              }`}>
+                <Activity className={`w-5 h-5 ${
+                  scan.status === 'success' 
+                    ? 'text-emerald-600 dark:text-emerald-400' 
+                    : 'text-red-600 dark:text-red-400'
+                }`} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-surface-900 dark:text-white truncate">
+                  {scan.employeeName}
+                </p>
+                <p className="text-xs text-surface-500 dark:text-surface-400">
+                  {new Date(scan.timestamp).toLocaleTimeString()} • {scan.confidence}% confidence
+                </p>
+              </div>
+              <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                scan.status === 'success'
+                  ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
+                  : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+              }`}>
+                {scan.status === 'success' ? 'Marked' : 'Failed'}
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </motion.div>
     </div>
   );

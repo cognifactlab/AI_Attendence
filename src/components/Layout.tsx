@@ -1,189 +1,130 @@
-import React, { useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-  LayoutDashboard,
-  UserPlus,
-  ScanFace,
-  Users,
-  ClipboardList,
-  BarChart3,
-  Menu,
-  X,
-  Shield,
-  ChevronRight,
-  Moon,
-  Sun,
-  LogOut,
-  User,
-  Settings,
-} from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useThemeStore } from '../store/themeStore';
-import toast from 'react-hot-toast';
+import { 
+  LayoutDashboard, 
+  UserPlus, 
+  ScanFace, 
+  Users, 
+  ClipboardList, 
+  BarChart3,
+  Settings,
+  LogOut,
+  Sun,
+  Moon,
+  Shield
+} from 'lucide-react';
 
-const navItems = [
-  { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { path: '/face-registration', label: 'Face Registration', icon: UserPlus },
-  { path: '/face-recognition', label: 'Face Recognition', icon: ScanFace },
-  { path: '/employees', label: 'Employees', icon: Users },
-  { path: '/attendance', label: 'Attendance Records', icon: ClipboardList },
-  { path: '/reports', label: 'Reports', icon: BarChart3 },
-  { path: '/profile', label: 'Profile', icon: User },
-  { path: '/settings', label: 'Settings', icon: Settings },
+const navigation = [
+  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { name: 'Face Registration', href: '/face-registration', icon: UserPlus },
+  { name: 'Face Recognition', href: '/face-recognition', icon: ScanFace },
+  { name: 'Employees', href: '/employees', icon: Users },
+  { name: 'Attendance', href: '/attendance', icon: ClipboardList },
+  { name: 'Reports', href: '/reports', icon: BarChart3 },
 ];
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
-
-export default function Layout({ children }: LayoutProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+export default function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
-  const { isDark, toggle } = useThemeStore();
+  const { theme, toggleTheme } = useThemeStore();
 
   const handleLogout = () => {
     logout();
-    toast.success('Logged out successfully');
     navigate('/login');
   };
 
   return (
-    <div className="min-h-screen bg-surface-50 flex">
-      {/* Mobile overlay */}
-      <AnimatePresence>
-        {sidebarOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-            onClick={() => setSidebarOpen(false)}
-          />
-        )}
-      </AnimatePresence>
-
+    <div className="min-h-screen bg-surface-50 dark:bg-surface-950">
       {/* Sidebar */}
-      <aside
-        className={`fixed lg:static inset-y-0 left-0 z-50 w-72 bg-surface-900 text-white transform transition-transform duration-300 ease-in-out ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-        }`}
-      >
-        <div className="flex flex-col h-full">
-          {/* Logo */}
-          <div className="p-6 border-b border-surface-700">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
-                <Shield className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-lg font-bold">FaceTrack AI</h1>
-                <p className="text-xs text-surface-400">Attendance System</p>
-              </div>
+      <aside className="fixed left-0 top-0 h-screen w-64 bg-white dark:bg-surface-900 border-r border-surface-200 dark:border-surface-800 flex flex-col z-40">
+        {/* Logo */}
+        <div className="h-16 flex items-center px-6 border-b border-surface-200 dark:border-surface-800">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-lg shadow-primary-500/20">
+              <Shield className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h1 className="text-base font-bold text-surface-900 dark:text-white">FaceTrack AI</h1>
+              <p className="text-xs text-surface-500 dark:text-surface-400">Attendance System</p>
             </div>
           </div>
+        </div>
 
-          {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = location.pathname === item.path;
-              return (
-                <NavLink
-                  key={item.path}
-                  to={item.path}
-                  onClick={() => setSidebarOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${
-                    isActive
-                      ? 'bg-primary-600 text-white shadow-lg shadow-primary-600/30'
-                      : 'text-surface-300 hover:bg-surface-800 hover:text-white'
-                  }`}
-                >
-                  <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-surface-400 group-hover:text-primary-400'}`} />
-                  <span className="flex-1">{item.label}</span>
-                  {isActive && <ChevronRight className="w-4 h-4" />}
-                </NavLink>
-              );
-            })}
-          </nav>
+        {/* Navigation */}
+        <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+          {navigation.map((item) => {
+            const Icon = item.icon;
+            const isActive = location.pathname === item.href;
+            
+            return (
+              <NavLink
+                key={item.name}
+                to={item.href}
+                className={`sidebar-item ${isActive ? 'active' : ''} flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                  isActive
+                    ? 'bg-gradient-to-r from-primary-50 to-primary-100/50 dark:from-primary-900/20 dark:to-primary-800/10 text-primary-700 dark:text-primary-400'
+                    : 'text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-800'
+                }`}
+              >
+                <Icon className={`w-5 h-5 ${isActive ? 'text-primary-600 dark:text-primary-400' : ''}`} />
+                <span>{item.name}</span>
+              </NavLink>
+            );
+          })}
+        </nav>
 
-          {/* Bottom section */}
-          <div className="p-4 border-t border-surface-700">
-            <div className="glass-dark rounded-xl p-4 mb-3">
-              <div className="flex items-center gap-3">
-                <img
-                  src={user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'U')}&background=3b82f6&color=fff&size=64`}
-                  alt={user?.name}
-                  className="w-8 h-8 rounded-full"
-                />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">{user?.name || 'User'}</p>
-                  <p className="text-xs text-surface-400 truncate">{user?.email || 'user@company.com'}</p>
-                </div>
-              </div>
+        {/* Bottom Section */}
+        <div className="border-t border-surface-200 dark:border-surface-800 p-4 space-y-3">
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-800 transition-all"
+          >
+            {theme === 'dark' ? (
+              <>
+                <Sun className="w-5 h-5" />
+                <span>Light Mode</span>
+              </>
+            ) : (
+              <>
+                <Moon className="w-5 h-5" />
+                <span>Dark Mode</span>
+              </>
+            )}
+          </button>
+
+          {/* User Profile */}
+          <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-surface-50 dark:bg-surface-800/50">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white font-semibold text-sm">
+              {user?.name?.charAt(0) || 'U'}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-surface-900 dark:text-white truncate">
+                {user?.name || 'User'}
+              </p>
+              <p className="text-xs text-surface-500 dark:text-surface-400 truncate">
+                {user?.email || 'user@example.com'}
+              </p>
             </div>
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-surface-300 hover:bg-surface-800 hover:text-red-400 transition-colors text-sm"
+              className="p-1.5 rounded-lg text-surface-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all"
+              title="Logout"
             >
               <LogOut className="w-4 h-4" />
-              <span>Logout</span>
             </button>
           </div>
         </div>
       </aside>
 
-      {/* Main content */}
-      <div className="flex-1 flex flex-col min-h-screen">
-        {/* Top bar */}
-        <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-surface-200 px-4 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => setSidebarOpen(true)}
-                className="lg:hidden p-2 rounded-lg hover:bg-surface-100 transition-colors"
-              >
-                {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </button>
-              <div>
-                <h2 className="text-lg font-semibold text-surface-900">
-                  {navItems.find(n => n.path === location.pathname)?.label || 'Welcome'}
-                </h2>
-                <p className="text-sm text-surface-500">
-                  {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-accent-50 rounded-full">
-                <div className="w-2 h-2 rounded-full bg-accent-500 animate-pulse" />
-                <span className="text-xs font-medium text-accent-700">System Online</span>
-              </div>
-              <button
-                onClick={toggle}
-                className="p-2 rounded-lg hover:bg-surface-100 transition-colors"
-                title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-              >
-                {isDark ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5 text-surface-500" />}
-              </button>
-              <NavLink to="/profile" className="flex items-center gap-2">
-                <img
-                  src={user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'U')}&background=3b82f6&color=fff&size=64`}
-                  alt={user?.name}
-                  className="w-9 h-9 rounded-full"
-                />
-              </NavLink>
-            </div>
-          </div>
-        </header>
-
-        {/* Page content */}
-        <main className="flex-1 p-4 lg:p-8 overflow-y-auto">
+      {/* Main Content */}
+      <main className="ml-64 min-h-screen">
+        <div className="p-8">
           {children}
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }
