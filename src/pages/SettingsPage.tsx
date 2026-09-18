@@ -8,7 +8,7 @@ import { useThemeStore } from '../store/themeStore';
 import toast from 'react-hot-toast';
 
 export default function SettingsPage() {
-  const { isDark, toggle, setDark } = useThemeStore();
+  const { theme, toggleTheme, setTheme } = useThemeStore();
   const [loading, setLoading] = useState(false);
   const [settings, setSettings] = useState({
     emailNotifications: true,
@@ -51,18 +51,18 @@ export default function SettingsPage() {
             <label className="text-sm font-medium text-surface-700 mb-3 block">Theme</label>
             <div className="grid grid-cols-3 gap-3">
               <button
-                onClick={() => setDark(false)}
+                onClick={() => setTheme('light')}
                 className={`p-4 rounded-xl border-2 flex flex-col items-center gap-2 transition-all ${
-                  !isDark ? 'border-primary-500 bg-primary-50' : 'border-surface-200 hover:border-surface-300'
+                  theme === 'light' ? 'border-primary-500 bg-primary-50' : 'border-surface-200 hover:border-surface-300'
                 }`}
               >
                 <Sun className="w-6 h-6 text-amber-500" />
                 <span className="text-sm font-medium">Light</span>
               </button>
               <button
-                onClick={() => setDark(true)}
+                onClick={() => setTheme('dark')}
                 className={`p-4 rounded-xl border-2 flex flex-col items-center gap-2 transition-all ${
-                  isDark ? 'border-primary-500 bg-primary-50' : 'border-surface-200 hover:border-surface-300'
+                  theme === 'dark' ? 'border-primary-500 bg-primary-50' : 'border-surface-200 hover:border-surface-300'
                 }`}
               >
                 <Moon className="w-6 h-6 text-indigo-500" />

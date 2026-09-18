@@ -40,15 +40,15 @@ function LoadingFallback() {
 }
 
 function App() {
-  const isDark = useThemeStore((s) => s.isDark);
+  const theme = useThemeStore((s) => s.theme);
 
   useEffect(() => {
-    if (isDark) {
+    if (theme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
-  }, [isDark]);
+  }, [theme]);
 
   return (
     <ErrorBoundary>

@@ -2,31 +2,31 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 interface ThemeState {
-  isDark: boolean;
-  toggle: () => void;
-  setDark: (dark: boolean) => void;
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
+  setTheme: (theme: 'light' | 'dark') => void;
 }
 
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
-      isDark: false,
-      toggle: () => set((state) => {
-        const newDark = !state.isDark;
-        if (newDark) {
+      theme: 'light',
+      toggleTheme: () => set((state) => {
+        const newTheme = state.theme === 'light' ? 'dark' : 'light';
+        if (newTheme === 'dark') {
           document.documentElement.classList.add('dark');
         } else {
           document.documentElement.classList.remove('dark');
         }
-        return { isDark: newDark };
+        return { theme: newTheme };
       }),
-      setDark: (dark: boolean) => set(() => {
-        if (dark) {
+      setTheme: (theme: 'light' | 'dark') => set(() => {
+        if (theme === 'dark') {
           document.documentElement.classList.add('dark');
         } else {
           document.documentElement.classList.remove('dark');
         }
-        return { isDark: dark };
+        return { theme };
       }),
     }),
     {

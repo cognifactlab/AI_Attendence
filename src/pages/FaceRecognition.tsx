@@ -1,8 +1,18 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Camera, Scan, CheckCircle2, XCircle, Clock, User,
-  Play, Pause, RotateCcw, Zap, Target, Activity, Video, VideoOff
+  Camera,
+  Scan,
+  CheckCircle2,
+  XCircle,
+  Clock,
+  User,
+  Play,
+  Pause,
+  Zap,
+  Target,
+  Activity,
+  VideoOff
 } from 'lucide-react';
 import { employees, recentScans as initialScans } from '../data/mockData';
 import { ScanResult } from '../types';
@@ -117,32 +127,39 @@ export default function FaceRecognition() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Main Scanner */}
+    <div className="space-y-8">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold text-surface-900 dark:text-white mb-2">
+          Face Recognition
+        </h1>
+        <p className="text-surface-600 dark:text-surface-400">
+          Real-time face detection and attendance marking
+        </p>
+      </div>
+
       <div className="grid lg:grid-cols-3 gap-6">
-        {/* Camera View */}
+        {/* Main Scanner */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-surface-100 overflow-hidden"
+          className="lg:col-span-2 card overflow-hidden"
         >
-          <div className="p-6 border-b border-surface-100 flex items-center justify-between">
+          <div className="p-6 border-b border-surface-200 dark:border-surface-700 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className={`w-3 h-3 rounded-full ${scanning ? 'bg-accent-500 animate-pulse' : 'bg-surface-300'}`} />
-              <h3 className="text-lg font-semibold text-surface-900">Live Scanner</h3>
+              <div className={`w-3 h-3 rounded-full ${scanning ? 'bg-emerald-500 animate-pulse' : 'bg-surface-300 dark:bg-surface-600'}`} />
+              <h3 className="text-lg font-semibold text-surface-900 dark:text-white">Live Scanner</h3>
             </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={toggleScanning}
-                className={`px-4 py-2 rounded-xl font-medium text-sm flex items-center gap-2 transition-all ${
-                  scanning
-                    ? 'bg-red-50 text-red-600 hover:bg-red-100'
-                    : 'bg-primary-600 text-white hover:bg-primary-700'
-                }`}
-              >
-                {scanning ? <><Pause className="w-4 h-4" /> Stop</> : <><Play className="w-4 h-4" /> Start</>}
-              </button>
-            </div>
+            <button
+              onClick={toggleScanning}
+              className={`px-5 py-2.5 rounded-xl font-medium text-sm flex items-center gap-2 transition-all ${
+                scanning
+                  ? 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30'
+                  : 'btn-primary'
+              }`}
+            >
+              {scanning ? <><Pause className="w-4 h-4" /> Stop</> : <><Play className="w-4 h-4" /> Start</>}
+            </button>
           </div>
 
           {/* Camera Feed */}
@@ -157,7 +174,6 @@ export default function FaceRecognition() {
               </div>
             ) : (
               <>
-                {/* Real camera feed or simulated */}
                 {cameraActive && cameraReady ? (
                   <video
                     ref={videoRef}
@@ -169,7 +185,7 @@ export default function FaceRecognition() {
                 ) : (
                   <div className="absolute inset-0 bg-gradient-to-br from-surface-800 to-surface-900">
                     <div className="absolute inset-0 opacity-20" style={{
-                      backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(59,130,246,0.3) 0%, transparent 50%)'
+                      backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.3) 0%, transparent 50%)'
                     }} />
                   </div>
                 )}
@@ -178,22 +194,21 @@ export default function FaceRecognition() {
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className={`relative transition-all duration-500 ${faceDetected ? 'scale-100 opacity-100' : 'scale-90 opacity-30'}`}>
                     <div className={`w-40 h-48 rounded-2xl border-3 ${
-                      faceDetected ? 'border-accent-400' : 'border-white/20'
+                      faceDetected ? 'border-emerald-400' : 'border-white/20'
                     } flex items-center justify-center`}>
                       {faceDetected ? (
-                        <User className="w-16 h-16 text-accent-400" />
+                        <User className="w-16 h-16 text-emerald-400" />
                       ) : (
                         <div className="w-16 h-16 rounded-full border-2 border-dashed border-white/20" />
                       )}
                     </div>
                     
-                    {/* Corner markers */}
                     {faceDetected && (
                       <>
-                        <div className="absolute -top-1 -left-1 w-6 h-6 border-t-3 border-l-3 border-accent-400 rounded-tl-lg" />
-                        <div className="absolute -top-1 -right-1 w-6 h-6 border-t-3 border-r-3 border-accent-400 rounded-tr-lg" />
-                        <div className="absolute -bottom-1 -left-1 w-6 h-6 border-b-3 border-l-3 border-accent-400 rounded-bl-lg" />
-                        <div className="absolute -bottom-1 -right-1 w-6 h-6 border-b-3 border-r-3 border-accent-400 rounded-br-lg" />
+                        <div className="absolute -top-1 -left-1 w-6 h-6 border-t-3 border-l-3 border-emerald-400 rounded-tl-lg" />
+                        <div className="absolute -top-1 -right-1 w-6 h-6 border-t-3 border-r-3 border-emerald-400 rounded-tr-lg" />
+                        <div className="absolute -bottom-1 -left-1 w-6 h-6 border-b-3 border-l-3 border-emerald-400 rounded-bl-lg" />
+                        <div className="absolute -bottom-1 -right-1 w-6 h-6 border-b-3 border-r-3 border-emerald-400 rounded-br-lg" />
                       </>
                     )}
                   </div>
@@ -207,16 +222,10 @@ export default function FaceRecognition() {
                 {/* Status badges */}
                 <div className="absolute top-4 left-4 flex items-center gap-2">
                   <div className={`px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 ${
-                    faceDetected ? 'bg-accent-500/20 text-accent-300' : 'bg-white/10 text-white/50'
+                    faceDetected ? 'bg-emerald-500/20 text-emerald-300' : 'bg-white/10 text-white/50'
                   }`}>
-                    <div className={`w-2 h-2 rounded-full ${faceDetected ? 'bg-accent-400 animate-pulse' : 'bg-white/30'}`} />
+                    <div className={`w-2 h-2 rounded-full ${faceDetected ? 'bg-emerald-400 animate-pulse' : 'bg-white/30'}`} />
                     {faceDetected ? 'Face Detected' : 'Searching...'}
-                  </div>
-                </div>
-
-                <div className="absolute top-4 right-4">
-                  <div className="px-3 py-1.5 rounded-full bg-white/10 text-white/70 text-xs font-mono">
-                    {new Date().toLocaleTimeString()}
                   </div>
                 </div>
 
@@ -228,12 +237,12 @@ export default function FaceRecognition() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
                       className={`absolute bottom-4 left-4 right-4 p-4 rounded-xl backdrop-blur-md ${
-                        currentMatch.status === 'success' ? 'bg-accent-500/20 border border-accent-400/30' : 'bg-red-500/20 border border-red-400/30'
+                        currentMatch.status === 'success' ? 'bg-emerald-500/20 border border-emerald-400/30' : 'bg-red-500/20 border border-red-400/30'
                       }`}
                     >
                       <div className="flex items-center gap-3">
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                          currentMatch.status === 'success' ? 'bg-accent-500' : 'bg-red-500'
+                          currentMatch.status === 'success' ? 'bg-emerald-500' : 'bg-red-500'
                         }`}>
                           {currentMatch.status === 'success' ? (
                             <CheckCircle2 className="w-5 h-5 text-white" />
@@ -259,21 +268,21 @@ export default function FaceRecognition() {
 
           {/* Stats bar */}
           <div className="px-6 pb-6 grid grid-cols-3 gap-4">
-            <div className="bg-surface-50 rounded-xl p-3 text-center">
-              <div className="text-xl font-bold text-surface-900">{stats.total}</div>
-              <div className="text-xs text-surface-500 flex items-center justify-center gap-1">
+            <div className="bg-surface-50 dark:bg-surface-800/50 rounded-xl p-3 text-center">
+              <div className="text-xl font-bold text-surface-900 dark:text-white">{stats.total}</div>
+              <div className="text-xs text-surface-500 dark:text-surface-400 flex items-center justify-center gap-1">
                 <Target className="w-3 h-3" /> Total Scans
               </div>
             </div>
-            <div className="bg-surface-50 rounded-xl p-3 text-center">
-              <div className="text-xl font-bold text-accent-600">{stats.successful}</div>
-              <div className="text-xs text-surface-500 flex items-center justify-center gap-1">
+            <div className="bg-surface-50 dark:bg-surface-800/50 rounded-xl p-3 text-center">
+              <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400">{stats.successful}</div>
+              <div className="text-xs text-surface-500 dark:text-surface-400 flex items-center justify-center gap-1">
                 <CheckCircle2 className="w-3 h-3" /> Successful
               </div>
             </div>
-            <div className="bg-surface-50 rounded-xl p-3 text-center">
-              <div className="text-xl font-bold text-red-500">{stats.failed}</div>
-              <div className="text-xs text-surface-500 flex items-center justify-center gap-1">
+            <div className="bg-surface-50 dark:bg-surface-800/50 rounded-xl p-3 text-center">
+              <div className="text-xl font-bold text-red-500 dark:text-red-400">{stats.failed}</div>
+              <div className="text-xs text-surface-500 dark:text-surface-400 flex items-center justify-center gap-1">
                 <XCircle className="w-3 h-3" /> Failed
               </div>
             </div>
@@ -285,24 +294,16 @@ export default function FaceRecognition() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white rounded-2xl shadow-sm border border-surface-100 overflow-hidden"
+          className="card overflow-hidden"
         >
-          <div className="p-6 border-b border-surface-100">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-surface-900">Scan History</h3>
-              <button
-                onClick={() => setScanHistory([])}
-                className="text-sm text-surface-500 hover:text-surface-700 flex items-center gap-1"
-              >
-                <RotateCcw className="w-3 h-3" /> Clear
-              </button>
-            </div>
+          <div className="p-6 border-b border-surface-200 dark:border-surface-700">
+            <h3 className="text-lg font-semibold text-surface-900 dark:text-white">Scan History</h3>
           </div>
-          <div className="divide-y divide-surface-100 max-h-[600px] overflow-y-auto">
+          <div className="divide-y divide-surface-200 dark:divide-surface-700 max-h-[600px] overflow-y-auto">
             {scanHistory.length === 0 ? (
               <div className="p-8 text-center">
-                <Scan className="w-12 h-12 text-surface-300 mx-auto mb-3" />
-                <p className="text-surface-500 text-sm">No scans yet</p>
+                <Scan className="w-12 h-12 text-surface-300 dark:text-surface-600 mx-auto mb-3" />
+                <p className="text-surface-500 dark:text-surface-400 text-sm">No scans yet</p>
               </div>
             ) : (
               scanHistory.map((scan, i) => (
@@ -311,25 +312,25 @@ export default function FaceRecognition() {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.02 }}
-                  className="p-4 hover:bg-surface-50 transition-colors"
+                  className="p-4 hover:bg-surface-50 dark:hover:bg-surface-800/50 transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${
-                      scan.status === 'success' ? 'bg-accent-100' : 'bg-red-100'
+                      scan.status === 'success' ? 'bg-emerald-100 dark:bg-emerald-900/30' : 'bg-red-100 dark:bg-red-900/30'
                     }`}>
                       {scan.status === 'success' ? (
-                        <CheckCircle2 className="w-4 h-4 text-accent-600" />
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                       ) : (
-                        <XCircle className="w-4 h-4 text-red-500" />
+                        <XCircle className="w-4 h-4 text-red-500 dark:text-red-400" />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-surface-900 truncate">{scan.employeeName}</p>
-                      <div className="flex items-center gap-2 text-xs text-surface-500">
+                      <p className="text-sm font-medium text-surface-900 dark:text-white truncate">{scan.employeeName}</p>
+                      <div className="flex items-center gap-2 text-xs text-surface-500 dark:text-surface-400">
                         <Clock className="w-3 h-3" />
                         {new Date(scan.timestamp).toLocaleTimeString()}
                         {scan.confidence > 0 && (
-                          <span className="text-accent-600 font-medium">{scan.confidence}%</span>
+                          <span className="text-emerald-600 dark:text-emerald-400 font-medium">{scan.confidence}%</span>
                         )}
                       </div>
                     </div>
@@ -342,11 +343,11 @@ export default function FaceRecognition() {
       </div>
 
       {/* Info Cards */}
-      <div className="grid sm:grid-cols-3 gap-4">
+      <div className="grid sm:grid-cols-3 gap-6">
         {[
-          { icon: Zap, title: 'Processing Speed', value: '<100ms', desc: 'Average recognition time', color: 'text-amber-500' },
-          { icon: Target, title: 'Match Accuracy', value: '96.8%', desc: 'Using 128-d embeddings', color: 'text-primary-500' },
-          { icon: Activity, title: 'Database Size', value: `${employees.filter(e => e.faceRegistered).length} faces`, desc: 'Registered in pgvector', color: 'text-accent-500' },
+          { icon: Zap, title: 'Processing Speed', value: '<100ms', desc: 'Average recognition time', gradient: 'from-amber-500 to-orange-500' },
+          { icon: Target, title: 'Match Accuracy', value: '96.8%', desc: 'Using 128-d embeddings', gradient: 'from-primary-500 to-indigo-500' },
+          { icon: Activity, title: 'Database Size', value: `${employees.filter(e => e.faceRegistered).length} faces`, desc: 'Registered in pgvector', gradient: 'from-emerald-500 to-teal-500' },
         ].map((card, i) => {
           const Icon = card.icon;
           return (
@@ -355,12 +356,14 @@ export default function FaceRecognition() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 + i * 0.1 }}
-              className="bg-white rounded-2xl p-5 shadow-sm border border-surface-100"
+              className="card p-6"
             >
-              <Icon className={`w-8 h-8 ${card.color} mb-3`} />
-              <div className="text-2xl font-bold text-surface-900">{card.value}</div>
-              <div className="text-sm font-medium text-surface-700">{card.title}</div>
-              <div className="text-xs text-surface-500">{card.desc}</div>
+              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${card.gradient} flex items-center justify-center mb-4 shadow-lg`}>
+                <Icon className="w-6 h-6 text-white" />
+              </div>
+              <div className="text-2xl font-bold text-surface-900 dark:text-white">{card.value}</div>
+              <div className="text-sm font-medium text-surface-700 dark:text-surface-300">{card.title}</div>
+              <div className="text-xs text-surface-500 dark:text-surface-400">{card.desc}</div>
             </motion.div>
           );
         })}
