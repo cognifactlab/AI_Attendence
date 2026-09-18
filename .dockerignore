@@ -1,0 +1,59 @@
+# Dependencies
+node_modules
+backend/venv
+
+# Build outputs
+dist
+build
+
+# Environment
+.env
+.env.local
+.env.production
+backend/.env
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage
+.nyc_output
+.pytest_cache
+
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+!README.md
+docs
+.github
+
+# Backend
+backend
+
+# Docker
+docker-compose*.yml
+Dockerfile
+.dockerignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary
+tmp
+temp
+*.tmp
